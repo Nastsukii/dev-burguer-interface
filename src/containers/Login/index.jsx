@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { api } from '../../services/api';
 
 // biome-ignore assist/source/organizeImports: <explanation>
 import {
@@ -37,7 +38,13 @@ export function Login() {
   });
 
   console.log(errors);
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const response = await api.post('/session', {
+      email: data.email,
+      password: data.password
+    })
+    console.log(response)
+  }
 
   return (
     <Container>
@@ -46,7 +53,7 @@ export function Login() {
       </LeftContainer>
       <RightContainer>
         <Title>
-          Olá, seja bem vindo ao{' '}
+          Olá, seja bem vindo ao
           <span>
             Dev Burguer! <br />
           </span>
