@@ -16,7 +16,7 @@ import {
 import Logo from '../../assets/logo.svg';
 import { Button } from '../../components/button';
 
-export function Login() {
+export function Register() {
   const schema = yup
     .object({
       email: yup
