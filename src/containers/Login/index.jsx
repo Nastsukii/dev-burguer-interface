@@ -19,6 +19,7 @@ import { Button } from '../../components/button';
 export function Login() {
   const schema = yup
     .object({
+ 
       email: yup
         .string()
         .email('Digite um e-mail válido')
@@ -27,6 +28,7 @@ export function Login() {
         .string()
         .min(6, 'A senha deve ter pelo menos 6 caracteres')
         .required('Digite uma senha'),
+     
     })
     .required();
 
@@ -40,7 +42,7 @@ export function Login() {
 
   console.log(errors);
   const onSubmit = async (data) => {
-    const response = await toast.promise(api.post('/sessions', {
+    const response = await toast.promise(api.post('/users', {
       email: data.email,
       password: data.password
     }),

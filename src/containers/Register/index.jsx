@@ -19,6 +19,7 @@ import { Button } from '../../components/button';
 export function Register() {
   const schema = yup
     .object({
+      name: yup.string().required('O nome é obrigatório'),
       email: yup
         .string()
         .email('Digite um e-mail válido')
@@ -27,6 +28,9 @@ export function Register() {
         .string()
         .min(6, 'A senha deve ter pelo menos 6 caracteres')
         .required('Digite uma senha'),
+      confirmPassword: yup
+        .string()
+        .oneOf([yup.ref('password')], 'As senhas devem ser iguais').required('Confirme sua senha')
     })
     .required();
 
@@ -40,14 +44,15 @@ export function Register() {
 
   console.log(errors);
   const onSubmit = async (data) => {
-    const response = await toast.promise(api.post('/sessions', {
+    const response = await toast.promise(api.post('/users', {
+      name: data.name,
       email: data.email,
       password: data.password
     }),
   {
       pending: 'Verificando seus dados',
-      success: 'Seja bem vindo (a) 👌',
-      error: 'Email ou Senha Incorretos🤯'
+      success: 'Cadastro efetuado com sucesso 👌',
+      error: 'Ops, aldo deu errado! tente novamente🤯'
   })
     console.log(response)
   }
@@ -59,13 +64,14 @@ export function Register() {
       </LeftContainer>
       <RightContainer>
         <Title>
-          Olá, seja bem vindo ao
-          <span>
-            Dev Burguer! <br />
-          </span>
-          Acesse com seu <span>Login e senha.</span>
+         Criar Conta!
         </Title>
         <Form onSubmit={handleSubmit(onSubmit)}>
+          <InputContainer>
+            <label htmlFor="name-input"> Nome </label>
+            <input type="text" id="name-input" {...register('name')}></input>
+            <p>{errors?.name?.message}</p>
+          </InputContainer>
           <InputContainer>
             <label htmlFor="email-input"> Email </label>
             <input type="email" id="email-input" {...register('email')}></input>
@@ -80,10 +86,19 @@ export function Register() {
             ></input>
             <p>{errors?.password?.message}</p>
           </InputContainer>
-          <Button type="submit"> Entrar </Button>
+           <InputContainer>
+            <label htmlFor="confirm-password-input"> Confirmar Senha </label>
+            <input
+              type="password"
+              id="confirm-password-input"
+              {...register('confirmPassword')}
+            ></input>
+            <p>{errors?.confirmPassword?.message}</p>
+          </InputContainer>
+          <Button type="submit"> Criar Conta </Button>
         </Form>
         <p>
-          Não possui conta? <a> Clique aqui. </a>
+          Já possui conta? <a> Clique aqui. </a>
         </p>
       </RightContainer>
     </Container>
